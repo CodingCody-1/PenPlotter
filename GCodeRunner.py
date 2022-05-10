@@ -1,3 +1,4 @@
+from vex import *
 import time
 from math import pi, sin, cos, sqrt, acos, asin
 import Plotter as plotter

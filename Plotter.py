@@ -1,4 +1,5 @@
 # Python library for Cyber Buggies Pen Plotter
+from vex import *
 
 def home():
     home_Xaxis()
