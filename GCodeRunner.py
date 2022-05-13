@@ -93,18 +93,24 @@ def run_gcode(filename):  # read and execute G code
             plotter.SetPenDown(engraving)
 
             if (lines.find('X') != -1 and lines.find('Y') != -1):
-                [x_pos, y_pos] = XYposition(lines)
-                goto(x_pos, y_pos)
+                [x_pos, y_pos] = extract_XY(lines)
+                plotter.goto(x_pos, y_pos)
 
         elif (lines[0:3] == 'G02') | (lines[0:3] == 'G03'):  # circular interpolation
             if (lines.find('X') != -1 and lines.find('Y') != -1 and lines.find('I') != -1 and lines.find('J') != -1):
+
+                dx = .05
+                dy = .05
+
                 plotter.SetPenDown(True)
+
+                x_pos, y_pos = plotter.get_position()
 
                 old_x_pos = x_pos
                 old_y_pos = y_pos
 
-                [x_pos, y_pos] = XYposition(lines)
-                [i_pos, j_pos] = IJposition(lines)
+                [x_pos, y_pos] = extract_XY(lines)
+                [i_pos, j_pos] = extract_IJ(lines)
 
                 xcenter = old_x_pos+i_pos  # center of the circle for interpolation
                 ycenter = old_y_pos+j_pos
@@ -149,4 +155,4 @@ def run_gcode(filename):  # read and execute G code
                         cos(tmp_theta)+e2[0]*sin(tmp_theta)
                     tmp_y_pos = ycenter+e1[1] * \
                         cos(tmp_theta)+e2[1]*sin(tmp_theta)
-                    goto(tmp_x_pos, tmp_y_pos)
+                    plotter.goto(tmp_x_pos, tmp_y_pos)
